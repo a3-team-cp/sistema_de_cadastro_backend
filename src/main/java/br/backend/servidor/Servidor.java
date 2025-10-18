@@ -55,25 +55,34 @@ public class Servidor {
             while (true) {
                 Socket cliente = serverSocket.accept();
                 System.out.println("Cliente conectado: " + cliente.getInetAddress());
-
-                new Thread(() -> {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-                         PrintWriter out = new PrintWriter(cliente.getOutputStream(), true)) {
-
-                        String jsonRequisicao;
-                        while ((jsonRequisicao = in.readLine()) != null) {
-                            String resposta = processarRequisicao(jsonRequisicao);
-                            out.println(resposta);
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                new Thread(() -> processarCliente(cliente)).start();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private void processarCliente(Socket cliente) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+             PrintWriter out = new PrintWriter(cliente.getOutputStream(), true)) {
+
+            String jsonRequisicao;
+            while ((jsonRequisicao = in.readLine()) != null) {
+                String resposta = processarRequisicao(jsonRequisicao);
+                out.println(resposta);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao processar cliente " + cliente.getInetAddress() + ": " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                cliente.close();
+                System.out.println("Cliente desconectado: " + cliente.getInetAddress());
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -93,5 +102,9 @@ public class Servidor {
             e.printStackTrace();
             return JsonUtil.toJson(new Resposta("erro", "Erro interno", null));
         }
+    }
+
+    private void processarClientes(Socket client){
+
     }
 }
