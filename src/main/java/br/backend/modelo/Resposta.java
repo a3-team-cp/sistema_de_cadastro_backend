@@ -1,12 +1,12 @@
 package br.backend.modelo;
 
-public class Resposta {
+public class Resposta<T> {
 
     private String status;
     private String mensagem;
-    private Object dados;
+    private T dados;
 
-    public Resposta(String status, String mensagem, Object dados) {
+    public Resposta(String status, String mensagem, T dados) {
         this.status = status;
         this.mensagem = mensagem;
         this.dados = dados;
@@ -14,5 +14,5 @@ public class Resposta {
 
     public String getStatus() { return status; }
     public String getMensagem() { return mensagem; }
-    public Object getDados() { return dados; }
+    public T getDados() { return dados; }
 }
