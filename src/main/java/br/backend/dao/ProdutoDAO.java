@@ -10,7 +10,9 @@ public interface ProdutoDAO {
     void atualizarProduto(Integer id, Produto novoProduto);
 
     Produto buscarPorId(Integer id);
+    
+    void deletarPorId(Integer id);
 
-    List<Produto> resgatarProdutos();
+    List<Produto> resgatarTodosProdutos();
 
 }

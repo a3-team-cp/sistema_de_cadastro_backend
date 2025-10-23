@@ -33,15 +33,41 @@ public class ProdutoControladorImpl implements Controlador {
 
                     return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto criado com sucesso", objCriado));
                 }
+                
+                case "encontrar": {
+                    Integer id = objectMapper.convertValue(requisicao.getDados(), Produto.class).getId();
+                    Produto encontrado = produtoServico.buscarPorId(id);
+                    if (encontrado != null) {
+                        return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto encontrado", encontrado));
+                    } else {
+                        return objectMapper.writeValueAsString(new Resposta<>("erro", "Produto não encontrado", null));
+                    }
+                }
+                
                 case "atualizar": {
                     Produto objAtualizacao = objectMapper.convertValue(requisicao.getDados(), Produto.class);
                     Produto objAtualizado = produtoServico.atualizarProduto(objAtualizacao.getId(), objAtualizacao);
                     return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto atualizado com sucesso", objAtualizado));
                 }
+
+                case "deletar": {
+                    Integer id = objectMapper.convertValue(requisicao.getDados(), Produto.class).getId();
+                    boolean excluido = produtoServico.deletarProduto(id);
+                    if (excluido) {
+                        return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto deletado", null));
+                    } else {
+                        return objectMapper.writeValueAsString(new Resposta<>("erro", "Produto não encontrado", null));
+                    }
+                }
+                
+                case "listar": {
+                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Lista de categorias", produtoServico.listarProdutos()));
+                }
                 default:
                     return objectMapper.writeValueAsString(
                             new Resposta("erro", "Ação desconhecida: " + acao, null)
                     );
+
             }
 
         } catch (Exception e) {

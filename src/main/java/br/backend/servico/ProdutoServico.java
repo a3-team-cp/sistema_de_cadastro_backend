@@ -3,6 +3,7 @@ package br.backend.servico;
 import br.backend.dao.ProdutoDAO;
 import br.backend.modelo.Categoria;
 import br.backend.modelo.Produto;
+import java.util.List;
 
 public class ProdutoServico {
 
@@ -22,6 +23,23 @@ public class ProdutoServico {
 
     public Produto atualizarProduto(Integer id, Produto novoProduto) {
         produtoDAO.atualizarProduto(id, novoProduto);
+        return produtoDAO.buscarPorId(id);
+    }
+
+    public List<Produto> listarProdutos() {
+        return produtoDAO.resgatarTodosProdutos();
+    }
+
+    public boolean deletarProduto(Integer id) {
+        Produto existente = produtoDAO.buscarPorId(id);
+        if (existente == null) {
+            return false;
+        }
+        produtoDAO.deletarPorId(id);
+        return true;
+    }
+
+    public Produto buscarPorId(Integer id) {
         return produtoDAO.buscarPorId(id);
     }
 
