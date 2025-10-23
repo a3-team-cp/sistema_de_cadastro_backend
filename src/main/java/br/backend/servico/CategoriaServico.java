@@ -24,7 +24,7 @@ public class CategoriaServico {
     }
 
     public Categoria atualizarCategoria(Integer id, Categoria novaCategoria) {
-        categoriaDAO.atualizarCategoria(id, novaCategoria);
+        categoriaDAO.atualizarCategoria(id, novaCategoria); // atualiza
         return categoriaDAO.buscarPorId(id); // retorna o objeto atualizado
     }
 

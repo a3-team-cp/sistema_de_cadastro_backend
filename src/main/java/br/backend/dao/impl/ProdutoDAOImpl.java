@@ -4,6 +4,9 @@ import br.backend.dao.ProdutoDAO;
 import br.backend.database.Database;
 import br.backend.modelo.Categoria;
 import br.backend.modelo.Produto;
+import br.backend.modelo.enums.Embalagem;
+import br.backend.modelo.enums.Tamanho;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -101,7 +104,10 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public Produto buscarPorId(Integer id) {
-        String sql = "SELECT * FROM produto WHERE id = ?";
+        String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem " +
+                "FROM produto p " +
+                "JOIN categoria c ON p.categoria_id = c.id " +
+                "WHERE p.id = ?";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -141,6 +147,9 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
         Categoria cat = new Categoria();
         cat.setId(rs.getInt("categoria_id"));
+        cat.setNome(rs.getString("c_nome"));
+        cat.setTamanho(Tamanho.valueOf(rs.getString("c_tamanho")));
+        cat.setEmbalagem(Embalagem.valueOf(rs.getString("c_embalagem")));
         p.setCategoria(cat);
 
         return p;
