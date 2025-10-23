@@ -3,8 +3,10 @@ package br.backend.servidor;
 
 import br.backend.controlador.impl.CategoriaControladorImpl;
 import br.backend.controlador.impl.ProdutoControladorImpl;
+import br.backend.dao.RegistroDAO;
 import br.backend.dao.impl.CategoriaDAOImpl;
 import br.backend.dao.impl.ProdutoDAOImpl;
+import br.backend.dao.impl.RegistroDAOImpl;
 import br.backend.database.Database;
 import br.backend.modelo.Requisicao;
 import br.backend.modelo.Resposta;
@@ -28,6 +30,8 @@ public class Servidor {
     private CategoriaDAOImpl categoriaDAO;
     private CategoriaControladorImpl categoriaControlador;
 
+    private RegistroDAO registroDAO;
+
     private ProdutoServico produtoServico;
     private ProdutoDAOImpl produtoDAO;
     private ProdutoControladorImpl produtoControlador;
@@ -41,10 +45,11 @@ public class Servidor {
         this.categoriaServico = new CategoriaServico(categoriaDAO);
         this.categoriaControlador = new CategoriaControladorImpl(categoriaServico);
 
+        this.registroDAO = new RegistroDAOImpl(database);
 
 
         this.produtoDAO = new ProdutoDAOImpl(database);
-        this.produtoServico = new ProdutoServico(produtoDAO);
+        this.produtoServico = new ProdutoServico(produtoDAO, registroDAO);
         this.produtoControlador = new ProdutoControladorImpl(produtoServico);
     }
 

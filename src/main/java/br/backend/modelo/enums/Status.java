@@ -8,6 +8,7 @@ public enum Status {
     ADICIONADO,
     NOMEALTERADO,
     DELETADO,
-    NENHUM
+    NENHUM,
+    ALTERADO
 
 }
