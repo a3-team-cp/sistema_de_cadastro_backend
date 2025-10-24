@@ -123,7 +123,22 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public List<Produto> resgatarTodosProdutos() {
-        String sql = "SELECT * FROM produto";
+        String sql = """
+                    SELECT\s
+                        p.id,
+                        p.nome,
+                        p.preco_unitario,
+                        p.unidade,
+                        p.quantidade,
+                        p.quantidade_minima,
+                        p.quantidade_maxima,
+                        p.categoria_id,
+                        c.nome AS c_nome,
+                        c.tamanho AS c_tamanho,
+                        c.embalagem AS c_embalagem
+                    FROM produto p
+                    INNER JOIN categoria c ON p.categoria_id = c.id
+               \s""";
         List<Produto> lista = new ArrayList<>();
         try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {

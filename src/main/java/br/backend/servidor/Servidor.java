@@ -3,15 +3,9 @@ package br.backend.servidor;
 
 import br.backend.controlador.impl.CategoriaControladorImpl;
 import br.backend.controlador.impl.ProdutoControladorImpl;
-import br.backend.dao.RegistroDAO;
-import br.backend.dao.impl.CategoriaDAOImpl;
-import br.backend.dao.impl.ProdutoDAOImpl;
-import br.backend.dao.impl.RegistroDAOImpl;
 import br.backend.database.Database;
 import br.backend.modelo.Requisicao;
 import br.backend.modelo.Resposta;
-import br.backend.servico.CategoriaServico;
-import br.backend.servico.ProdutoServico;
 import br.backend.util.JsonUtil;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
