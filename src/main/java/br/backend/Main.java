@@ -1,5 +1,6 @@
 package br.backend;
 
+import br.backend.config.ContextoAplicacao;
 import br.backend.dao.impl.CategoriaDAOImpl;
 import br.backend.database.Database;
 import br.backend.modelo.Categoria;
@@ -12,7 +13,13 @@ import br.backend.servidor.Servidor;
 public class Main {
     public static void main(String[] args) {
 
-        Servidor servidor = new Servidor(3001);
+        System.out.println("Iniciando api");
+        ContextoAplicacao contexto = new ContextoAplicacao();
+
+        Servidor servidor = new Servidor(
+                3001,
+                contexto.getCategoriaControlador(),
+                contexto.getProdutoControlador());
         servidor.iniciar();
     }
 }

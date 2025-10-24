@@ -26,31 +26,14 @@ public class Servidor {
 
     private Database database;
 
-    private CategoriaServico categoriaServico;
-    private CategoriaDAOImpl categoriaDAO;
     private CategoriaControladorImpl categoriaControlador;
-
-    private RegistroDAO registroDAO;
-
-    private ProdutoServico produtoServico;
-    private ProdutoDAOImpl produtoDAO;
     private ProdutoControladorImpl produtoControlador;
 
-    public Servidor(int porta) {
+    public Servidor(int porta, CategoriaControladorImpl categoriaControlador, ProdutoControladorImpl produtoControlador) {
         this.porta = porta;
-        // Inicializa o Database apenas uma vez
-        this.database = new Database();
 
-        this.categoriaDAO = new CategoriaDAOImpl(database);
-        this.categoriaServico = new CategoriaServico(categoriaDAO);
-        this.categoriaControlador = new CategoriaControladorImpl(categoriaServico);
-
-        this.registroDAO = new RegistroDAOImpl(database);
-
-
-        this.produtoDAO = new ProdutoDAOImpl(database);
-        this.produtoServico = new ProdutoServico(produtoDAO, registroDAO);
-        this.produtoControlador = new ProdutoControladorImpl(produtoServico);
+        this.categoriaControlador = categoriaControlador;
+        this.produtoControlador = produtoControlador;
     }
 
     public void iniciar() {
