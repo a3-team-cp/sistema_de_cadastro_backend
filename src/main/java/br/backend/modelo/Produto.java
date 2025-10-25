@@ -6,7 +6,7 @@ public class Produto {
     private String nome;
     private Double preco;
     private String unidade;
-    private Categoria categoria;
+    private Integer categoriaId;
     private Integer quantidade;
     private Integer quantidadeMinima;
     private Integer quantidadeMaxima;
@@ -14,12 +14,12 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(Integer id, String nome, Double preco, String unidade, Categoria categoria, Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
+    public Produto(Integer id, String nome, Double preco, String unidade, Integer categoriaId, Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.unidade = unidade;
-        this.categoria = categoria;
+        this.categoriaId = categoriaId;
         this.quantidade = quantidade;
         this.quantidadeMinima = quantidadeMinima;
         this.quantidadeMaxima = quantidadeMaxima;
@@ -57,12 +57,12 @@ public class Produto {
         this.unidade = unidade;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Integer getCategoriaId() {
+        return categoriaId;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaId(Integer categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public Integer getQuantidade() {
@@ -88,4 +88,5 @@ public class Produto {
     public void setQuantidadeMaxima(Integer quantidadeMaxima) {
         this.quantidadeMaxima = quantidadeMaxima;
     }
+
 }
