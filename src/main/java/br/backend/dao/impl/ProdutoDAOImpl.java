@@ -2,10 +2,7 @@ package br.backend.dao.impl;
 
 import br.backend.dao.ProdutoDAO;
 import br.backend.database.Database;
-import br.backend.modelo.Categoria;
 import br.backend.modelo.Produto;
-import br.backend.modelo.enums.Embalagem;
-import br.backend.modelo.enums.Tamanho;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +31,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             st.setInt(4, obj.getQuantidade());
             st.setInt(5, obj.getQuantidadeMinima());
             st.setInt(6, obj.getQuantidadeMaxima());
-            st.setInt(7, obj.getCategoria().getId());
+            st.setInt(7, obj.getCategoriaId());
 
             st.executeUpdate();
 
@@ -62,7 +59,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         produtoExistente.setQuantidade(novoProduto.getQuantidade());
         produtoExistente.setQuantidadeMinima(novoProduto.getQuantidadeMinima());
         produtoExistente.setQuantidadeMaxima(novoProduto.getQuantidadeMaxima());
-        produtoExistente.setCategoria(novoProduto.getCategoria());
+        produtoExistente.setCategoriaId(novoProduto.getCategoriaId());
 
         String sql = "UPDATE produto SET "
                 + "nome = ?, "
@@ -81,7 +78,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             st.setInt(4, produtoExistente.getQuantidade());
             st.setInt(5, produtoExistente.getQuantidadeMinima());
             st.setInt(6, produtoExistente.getQuantidadeMaxima());
-            st.setInt(7, produtoExistente.getCategoria().getId());
+            st.setInt(7, produtoExistente.getCategoriaId());
             st.setInt(8, produtoExistente.getId());
 
             st.executeUpdate();
@@ -104,10 +101,10 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public Produto buscarPorId(Integer id) {
-        String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem " +
-                "FROM produto p " +
-                "JOIN categoria c ON p.categoria_id = c.id " +
-                "WHERE p.id = ?";
+        String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
+                + "FROM produto p "
+                + "JOIN categoria c ON p.categoria_id = c.id "
+                + "WHERE p.id = ?";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -123,9 +120,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public List<Produto> resgatarTodosProdutos() {
-       String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem " +
-                 "FROM produto p " +
-                 "JOIN categoria c ON p.categoria_id = c.id";
+      String sql = "SELECT * FROM produto"; 
         List<Produto> lista = new ArrayList<>();
         try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -146,13 +141,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         p.setQuantidade(rs.getInt("quantidade"));
         p.setQuantidadeMinima(rs.getInt("quantidade_minima"));
         p.setQuantidadeMaxima(rs.getInt("quantidade_maxima"));
-
-        Categoria cat = new Categoria();
-        cat.setId(rs.getInt("categoria_id"));
-        cat.setNome(rs.getString("c_nome"));
-        cat.setTamanho(Tamanho.valueOf(rs.getString("c_tamanho")));
-        cat.setEmbalagem(Embalagem.valueOf(rs.getString("c_embalagem")));
-        p.setCategoria(cat);
+        p.setCategoriaId(rs.getInt("categoria_id"));
 
         return p;
     }

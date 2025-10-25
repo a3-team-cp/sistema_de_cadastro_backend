@@ -25,7 +25,7 @@ public class ProdutoServico {
     public Produto inserirProduto(String nome, Double preco, String unidade, Categoria categoria,
             Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
 
-        Produto pro = new Produto(null, nome, preco, unidade, categoria, quantidade, quantidadeMinima, quantidadeMaxima);
+        Produto pro = new Produto(quantidade, nome, preco, unidade, quantidade, quantidade, quantidadeMinima, quantidadeMaxima);
         produtoDAO.inserirProduto(pro);
 
         Registro r = new Registro();
