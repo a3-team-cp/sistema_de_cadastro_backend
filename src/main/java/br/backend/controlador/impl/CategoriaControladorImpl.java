@@ -2,8 +2,8 @@ package br.backend.controlador.impl;
 
 import br.backend.controlador.Controlador;
 import br.backend.modelo.Categoria;
-import br.backend.modelo.Requisicao;
-import br.backend.modelo.Resposta;
+import br.backend.dto.Requisicao;
+import br.backend.dto.Resposta;
 import br.backend.servico.CategoriaServico;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

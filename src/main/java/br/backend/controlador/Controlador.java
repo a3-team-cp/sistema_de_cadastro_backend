@@ -1,6 +1,6 @@
 package br.backend.controlador;
 
-import br.backend.modelo.Requisicao;
+import br.backend.dto.Requisicao;
 
 public interface Controlador {
 

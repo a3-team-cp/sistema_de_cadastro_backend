@@ -1,4 +1,4 @@
-package br.backend.modelo;
+package br.backend.dto;
 
 public class Resposta<T> {
 
