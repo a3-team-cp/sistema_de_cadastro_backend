@@ -22,10 +22,10 @@ public class ProdutoServico {
         this.registroService = new RegistroService(registroDAO);
     }
 
-    public Produto inserirProduto(String nome, Double preco, String unidade, Categoria categoria,
-            Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
+    public Produto inserirProduto(String nome, Double preco, String unidade, Integer categoriaId,
+            Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima, Boolean ativo) {
 
-        Produto pro = new Produto(quantidade, nome, preco, unidade, quantidade, quantidade, quantidadeMinima, quantidadeMaxima);
+        Produto pro = new Produto(null, nome, preco, unidade, categoriaId, quantidade, quantidadeMinima, quantidadeMaxima, ativo);
         produtoDAO.inserirProduto(pro);
 
         Registro r = new Registro();

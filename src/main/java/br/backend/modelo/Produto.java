@@ -10,11 +10,12 @@ public class Produto {
     private Integer quantidade;
     private Integer quantidadeMinima;
     private Integer quantidadeMaxima;
+    private Boolean ativo;
 
     public Produto() {
     }
 
-    public Produto(Integer id, String nome, Double preco, String unidade, Integer categoriaId, Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
+    public Produto(Integer id, String nome, Double preco, String unidade, Integer categoriaId, Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
@@ -23,6 +24,7 @@ public class Produto {
         this.quantidade = quantidade;
         this.quantidadeMinima = quantidadeMinima;
         this.quantidadeMaxima = quantidadeMaxima;
+        this.ativo = ativo;
     }
 
     public Integer getId() {
@@ -87,6 +89,14 @@ public class Produto {
 
     public void setQuantidadeMaxima(Integer quantidadeMaxima) {
         this.quantidadeMaxima = quantidadeMaxima;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 
 }

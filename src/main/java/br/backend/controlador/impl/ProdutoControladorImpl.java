@@ -3,8 +3,9 @@ package br.backend.controlador.impl;
 import br.backend.controlador.Controlador;
 import br.backend.modelo.Categoria;
 import br.backend.modelo.Produto;
-import br.backend.dto.Requisicao;
-import br.backend.dto.Resposta;
+import br.backend.modelo.Requisicao;
+import br.backend.modelo.Resposta;
+import br.backend.servico.CategoriaServico;
 import br.backend.servico.ProdutoServico;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,10 +27,8 @@ public class ProdutoControladorImpl implements Controlador {
             switch (acao) {
                 case "criar": {
                     Produto obj = objectMapper.convertValue(requisicao.getDados(), Produto.class);
-                    Categoria categoria = new Categoria();
-                    categoria.setId(obj.getCategoriaId());
-                    Produto objCriado = produtoServico.inserirProduto(obj.getNome(), obj.getPreco(), obj.getUnidade(), categoria,
-                            obj.getQuantidade(), obj.getQuantidadeMinima(), obj.getQuantidadeMaxima());
+                    Produto objCriado = produtoServico.inserirProduto(obj.getNome(), obj.getPreco(), obj.getUnidade(), obj.getCategoriaId(),
+                            obj.getQuantidade(), obj.getQuantidadeMinima(), obj.getQuantidadeMaxima(), obj.getAtivo());
 
                     return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto criado com sucesso", objCriado));
                 }
