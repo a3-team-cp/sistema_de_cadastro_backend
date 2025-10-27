@@ -43,10 +43,12 @@ public class ProdutoControladorImpl implements Controlador {
                 }
 
                 case "atualizar": {
-                    Produto objAtualizacao = objectMapper.convertValue(requisicao.getDados(), Produto.class);
-                    Produto objAtualizado = produtoServico.atualizarProduto(objAtualizacao.getId(), objAtualizacao);
-                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto atualizado com sucesso", objAtualizado));
-                }
+                Produto objAtualizacao = objectMapper.convertValue(requisicao.getDados(), Produto.class);
+                Produto objAtualizado = produtoServico.atualizarProduto(objAtualizacao.getId(), objAtualizacao);
+                return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto atualizado com sucesso", objAtualizado));
+            }
+        
+        
 
                 case "deletar": {
                     Integer id = objectMapper.convertValue(requisicao.getDados(), Produto.class).getId();

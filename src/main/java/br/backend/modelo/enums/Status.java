@@ -9,6 +9,5 @@ public enum Status {
     NOMEALTERADO,
     DELETADO,
     NENHUM,
-    ALTERADO
 
 }

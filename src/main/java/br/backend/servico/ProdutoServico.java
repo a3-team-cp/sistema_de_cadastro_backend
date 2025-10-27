@@ -16,7 +16,6 @@ public class ProdutoServico {
     private final ProdutoDAO produtoDAO;
     private final RegistroService registroService;
 
-
     public ProdutoServico(ProdutoDAO produtoDAO, RegistroDAO registroDAO) {
         this.produtoDAO = produtoDAO;
         this.registroService = new RegistroService(registroDAO);
@@ -50,9 +49,9 @@ public class ProdutoServico {
         Registro r = new Registro();
         r.setData(new Date());
         r.setTipoDoProduto(produtoAtualizado);
-        r.setMovimentacao(Movimentacao.NENHUM); // ou "ALTERACAO" dependendo do enum que você definiu
+        r.setMovimentacao(Movimentacao.NENHUM); // se o enum Movimentacao tiver ALTERACAO, senão use NENHUM
         r.setQuantidade(produtoAtualizado.getQuantidade());
-        r.setStatus(Status.ALTERADO); // ou outro Status conforme o que foi alterado
+        r.setStatus(Status.NOMEALTERADO); // agora usamos um valor existente no enum
 
         // Insere o registro via serviço
         registroService.inserirRegistro(r);
@@ -84,7 +83,6 @@ public class ProdutoServico {
 
         return true;
     }
-
 
     public Produto buscarPorId(Integer id) {
         return produtoDAO.buscarPorId(id);

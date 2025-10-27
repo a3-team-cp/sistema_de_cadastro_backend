@@ -7,7 +7,7 @@ public interface ProdutoDAO {
 
     void inserirProduto(Produto obj);
 
-    void atualizarProduto(Integer id, Produto novoProduto);
+    Produto atualizarProduto(Integer id, Produto novoProduto);
 
     Produto buscarPorId(Integer id);
     
