@@ -1,20 +1,24 @@
 package br.backend.controlador.impl;
 
 import br.backend.controlador.Controlador;
+import br.backend.estrategia.AcaoEstrategia;
+import br.backend.estrategia.categoria.*;
 import br.backend.modelo.Categoria;
 import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
 import br.backend.servico.CategoriaServico;
+import br.backend.util.JsonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Map;
 
 public class CategoriaControladorImpl implements Controlador {
 
     private final CategoriaServico categoriaServico;
-    private final ObjectMapper objectMapper;
+
 
     public CategoriaControladorImpl(CategoriaServico categoriaServico) {
         this.categoriaServico = categoriaServico;
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -22,54 +26,31 @@ public class CategoriaControladorImpl implements Controlador {
         try {
             String acao = requisicao.getAcao().toLowerCase();
 
-            switch (acao) {
-                case "criar": {
-                    Categoria cat = objectMapper.convertValue(requisicao.getDados(), Categoria.class);
-                    Categoria catCriada = categoriaServico.inserirCategoria(cat.getNome(), cat.getTamanho(), cat.getEmbalagem());
-                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Categoria criada", catCriada));
-                }
+            // Mapa de ações -> estratégias
+            Map<String, AcaoEstrategia> estrategias = Map.of(
+                    "criar", new CriarCategoriaEstrategia(categoriaServico),
+                    "encontrar", new EncontrarCategoriaEstrategia(categoriaServico),
+                    "atualizar", new AtualizarCategoriaEstrategia(categoriaServico),
+                    "deletar", new DeletarCategoriaEstrategia(categoriaServico),
+                    "listar", new ListarCategoriaEstrategia(categoriaServico)
+            );
 
-                case "encontrar": {
-                    Integer id = objectMapper.convertValue(requisicao.getDados(), Categoria.class).getId();
-                    Categoria encontrada = categoriaServico.buscarPorId(id);
-                    if (encontrada != null) {
-                        return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Categoria encontrada", encontrada));
-                    } else {
-                        return objectMapper.writeValueAsString(new Resposta<>("erro", "Categoria não encontrada", null));
-                    }
-                }
+            AcaoEstrategia estrategia = estrategias.get(acao);
 
-                case "atualizar": {
-                    Categoria catAtualizacao = objectMapper.convertValue(requisicao.getDados(), Categoria.class);
-                    Categoria catAtualizada = categoriaServico.atualizarCategoria(catAtualizacao.getId(), catAtualizacao);
-                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Categoria atualizada", catAtualizada));
-                }
-
-                case "deletar": {
-                    Integer id = objectMapper.convertValue(requisicao.getDados(), Categoria.class).getId();
-                    boolean excluido = categoriaServico.deletarCategoria(id);
-                    if (excluido) {
-                        return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Categoria deletada", null));
-                    } else {
-                        return objectMapper.writeValueAsString(new Resposta<>("erro", "Categoria não encontrada", null));
-                    }
-                }
-
-                case "listar": {
-                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Lista de categorias", categoriaServico.listarCategorias()));
-                }
-
-                default:
-                    return objectMapper.writeValueAsString(new Resposta<>("erro", "Ação desconhecida: " + acao, null));
+            if (estrategia == null) {
+                return JsonUtil.toJson(
+                        new Resposta<>("erro", "Ação desconhecida: " + acao, null)
+                );
             }
+
+            // Executa a estratégia correspondente
+            return estrategia.executar(requisicao);
 
         } catch (Exception e) {
             e.printStackTrace();
-            try {
-                return objectMapper.writeValueAsString(new Resposta<>("erro", "Erro ao processar requisição: " + e.getMessage(), null));
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+            return JsonUtil.toJson(
+                    new Resposta<>("erro", "Erro ao processar requisição: " + e.getMessage(), null)
+            );
         }
     }
 }
