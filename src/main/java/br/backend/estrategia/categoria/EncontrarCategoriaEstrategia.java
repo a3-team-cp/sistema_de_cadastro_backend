@@ -7,7 +7,6 @@ import br.backend.modelo.Categoria;
 import br.backend.servico.CategoriaServico;
 import br.backend.util.JsonUtil;
 import br.backend.util.Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EncontrarCategoriaEstrategia implements AcaoEstrategia {
 

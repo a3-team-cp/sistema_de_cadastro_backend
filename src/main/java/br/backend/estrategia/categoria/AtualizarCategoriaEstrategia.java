@@ -7,12 +7,10 @@ import br.backend.modelo.Categoria;
 import br.backend.servico.CategoriaServico;
 import br.backend.util.JsonUtil;
 import br.backend.util.Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AtualizarCategoriaEstrategia implements AcaoEstrategia {
 
     private final CategoriaServico categoriaServico;
-
 
     public AtualizarCategoriaEstrategia(CategoriaServico categoriaServico) {
         this.categoriaServico = categoriaServico;

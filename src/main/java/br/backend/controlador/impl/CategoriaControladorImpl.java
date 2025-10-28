@@ -3,19 +3,16 @@ package br.backend.controlador.impl;
 import br.backend.controlador.Controlador;
 import br.backend.estrategia.AcaoEstrategia;
 import br.backend.estrategia.categoria.*;
-import br.backend.modelo.Categoria;
 import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
 import br.backend.servico.CategoriaServico;
 import br.backend.util.JsonUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
 public class CategoriaControladorImpl implements Controlador {
 
     private final CategoriaServico categoriaServico;
-
 
     public CategoriaControladorImpl(CategoriaServico categoriaServico) {
         this.categoriaServico = categoriaServico;
@@ -43,7 +40,6 @@ public class CategoriaControladorImpl implements Controlador {
                 );
             }
 
-            // Executa a estratégia correspondente
             return estrategia.executar(requisicao);
 
         } catch (Exception e) {

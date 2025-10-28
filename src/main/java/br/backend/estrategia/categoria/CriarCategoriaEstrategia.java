@@ -7,7 +7,6 @@ import br.backend.modelo.Categoria;
 import br.backend.servico.CategoriaServico;
 import br.backend.util.JsonUtil;
 import br.backend.util.Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CriarCategoriaEstrategia implements AcaoEstrategia {
 
@@ -20,7 +19,7 @@ public class CriarCategoriaEstrategia implements AcaoEstrategia {
 
     @Override
     public String executar(Requisicao<?> requisicao) {
-        Categoria cat =  Util.fromObject(requisicao.getDados(), Categoria.class);
+        Categoria cat = Util.fromObject(requisicao.getDados(), Categoria.class);
         Categoria criada = categoriaServico.inserirCategoria(cat);
         return JsonUtil.toJson(new Resposta<>("Sucesso", "Categoria criada", criada));
     }
