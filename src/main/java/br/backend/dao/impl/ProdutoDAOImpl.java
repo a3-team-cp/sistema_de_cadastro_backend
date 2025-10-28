@@ -78,12 +78,12 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public void deletarPorId(Integer id) {
-        String sql = "DELETE FROM produto WHERE id = ?";
+        String sql = "UPDATE produto SET ativo = false WHERE id = ?";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar categoria: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao deletar produto: " + e.getMessage(), e);
         }
     }
 
