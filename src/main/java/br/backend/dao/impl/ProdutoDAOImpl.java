@@ -130,7 +130,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         p.setQuantidadeMinima(rs.getInt("quantidade_minima"));
         p.setQuantidadeMaxima(rs.getInt("quantidade_maxima"));
         p.setCategoriaId(rs.getInt("categoria_id"));
-        p.setAtivo(Boolean.TRUE);
+        p.setAtivo(rs.getBoolean("ativo"));
 
         return p;
     }
