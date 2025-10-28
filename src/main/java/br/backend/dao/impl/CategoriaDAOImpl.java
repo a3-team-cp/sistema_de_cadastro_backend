@@ -53,7 +53,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         categoriaExistente.setTamanho(novaCategoria.getTamanho());
         categoriaExistente.setEmbalagem(novaCategoria.getEmbalagem());
 
-        String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ? AND deleted = false";
+        String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ? AND ativo = true";
 
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setString(1, categoriaExistente.getNome());
@@ -68,7 +68,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public void deletarPorId(Integer id) {
-        String sql = "UPDATE categoria SET deleted = TRUE WHERE id = ?";
+        String sql = "UPDATE categoria SET ativo = false WHERE id = ?";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
@@ -79,7 +79,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public Categoria buscarPorId(Integer id) {
-        String sql = "SELECT * FROM categoria WHERE id = ? AND deleted = FALSE";
+        String sql = "SELECT * FROM categoria WHERE id = ? AND ativo = true";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -95,7 +95,7 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public List<Categoria> buscarTodasCategorias() {
-        String sql = "SELECT * FROM categoria WHERE deleted = FALSE";
+        String sql = "SELECT * FROM categoria WHERE ativo = true";
         List<Categoria> lista = new ArrayList<>();
         try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
