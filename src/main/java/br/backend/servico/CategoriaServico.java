@@ -17,10 +17,9 @@ public class CategoriaServico {
     }
 
     // Criar categoria
-    public Categoria inserirCategoria(String nome, Tamanho tamanho, Embalagem embalagem) {
-        Categoria cat = new Categoria(null, nome, tamanho, embalagem);
-        categoriaDAO.inserirCategoria(cat);
-        return cat; // retorna com o ID preenchido
+    public Categoria inserirCategoria(Categoria categoria) {
+        categoriaDAO.inserirCategoria(categoria);
+        return categoria; // retornará com ID preenchido após o DAO inserir
     }
 
     public Categoria atualizarCategoria(Integer id, Categoria novaCategoria) {
