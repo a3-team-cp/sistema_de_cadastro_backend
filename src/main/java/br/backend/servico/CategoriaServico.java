@@ -35,12 +35,10 @@ public class CategoriaServico {
 
     public boolean deletarCategoria(Integer id) {
         Categoria existente = categoriaDAO.buscarPorId(id);
-        if (existente == null) return false;
+        if (existente == null) {
+            return false;
+        }
         categoriaDAO.deletarPorId(id);
         return true;
     }
-
-
-
-
 }

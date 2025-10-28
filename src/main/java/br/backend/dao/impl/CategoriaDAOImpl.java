@@ -17,10 +17,9 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     Database database;
 
-    public CategoriaDAOImpl(Database database){
+    public CategoriaDAOImpl(Database database) {
         this.database = database;
     }
-
 
     @Override
     public void inserirCategoria(Categoria cat) {
@@ -41,7 +40,6 @@ public class CategoriaDAOImpl implements CategoriaDAO {
             throw new RuntimeException("Erro ao inserir categoria: " + e.getMessage());
         }
     }
-
 
     @Override
     public void atualizarCategoria(Integer id, Categoria novaCategoria) {
@@ -69,18 +67,18 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public void deletarPorId(Integer id) {
-        String sql = "DELETE FROM categoria WHERE id = ?";
+        String sql = "UPDATE categoria SET deleted = TRUE WHERE id = ?";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar categoria: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao marcar categoria como deletada: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Categoria buscarPorId(Integer id) {
-        String sql = "SELECT * FROM categoria WHERE id = ?";
+        String sql = "SELECT * FROM categoria WHERE id = ? AND deleted = FALSE";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -96,10 +94,9 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public List<Categoria> buscarTodasCategorias() {
-        String sql = "SELECT * FROM categoria";
+        String sql = "SELECT * FROM categoria WHERE deleted = FALSE";
         List<Categoria> lista = new ArrayList<>();
-        try (PreparedStatement st = database.getConnection().prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 lista.add(mapCategoria(rs));
             }
