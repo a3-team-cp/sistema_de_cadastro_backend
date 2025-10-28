@@ -26,11 +26,13 @@ public class ProdutoControladorImpl implements Controlador {
             switch (acao) {
                 case "criar": {
                     Produto obj = objectMapper.convertValue(requisicao.getDados(), Produto.class);
-                    Produto objCriado = produtoServico.inserirProduto(obj.getNome(), obj.getPreco(), obj.getUnidade(), obj.getCategoriaId(),
-                            obj.getQuantidade(), obj.getQuantidadeMinima(), obj.getQuantidadeMaxima(), obj.getAtivo());
+                    Produto objCriado = produtoServico.inserirProduto(obj);
 
-                    return objectMapper.writeValueAsString(new Resposta<>("sucesso", "Produto criado com sucesso", objCriado));
+                    return objectMapper.writeValueAsString(
+                            new Resposta<>("sucesso", "Produto criado com sucesso", objCriado)
+                    );
                 }
+
 
                 case "encontrar": {
                     Integer id = objectMapper.convertValue(requisicao.getDados(), Produto.class).getId();

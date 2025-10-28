@@ -21,22 +21,23 @@ public class ProdutoServico {
         this.registroService = new RegistroService(registroDAO);
     }
 
-    public Produto inserirProduto(String nome, Double preco, String unidade, Integer categoriaId,
-            Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima, Boolean ativo) {
+    public Produto inserirProduto(Produto produto) {
+        // Insere o produto no banco
+        produtoDAO.inserirProduto(produto);
 
-        Produto pro = new Produto(null, nome, preco, unidade, categoriaId, quantidade, quantidadeMinima, quantidadeMaxima, ativo);
-        produtoDAO.inserirProduto(pro);
-
+        // Cria o registro de movimentação
         Registro r = new Registro();
         r.setData(new Date());
-        r.setTipoDoProduto(pro);
+        r.setTipoDoProduto(produto);
         r.setMovimentacao(Movimentacao.ENTRADA);
-        r.setQuantidade(pro.getQuantidade());
+        r.setQuantidade(produto.getQuantidade());
         r.setStatus(Status.ADICIONADO);
+
         registroService.inserirRegistro(r);
 
-        return pro;
+        return produto;
     }
+
 
     public Produto atualizarProduto(Integer id, Produto novoProduto) {
         // Atualiza o produto no banco
