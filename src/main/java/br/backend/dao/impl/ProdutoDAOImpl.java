@@ -21,8 +21,8 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public void inserirProduto(Produto obj) {
-        String sql = "INSERT INTO produto (nome, preco_unitario, unidade, quantidade, quantidade_minima, quantidade_maxima, categoria_id, ativo) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO produto (nome, preco_unitario, unidade, quantidade, quantidade_minima, quantidade_maxima, categoria_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement st = database.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, obj.getNome());
@@ -32,7 +32,6 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             st.setInt(5, obj.getQuantidadeMinima());
             st.setInt(6, obj.getQuantidadeMaxima());
             st.setInt(7, obj.getCategoriaId());
-            st.setBoolean(8, obj.getAtivo());
 
             st.executeUpdate();
 
@@ -50,8 +49,8 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     @Override
     public Produto atualizarProduto(Integer id, Produto novoProduto) {
         String sql = "UPDATE produto SET "
-                + "nome = ?, preco_unitario = ?, unidade = ?, quantidade = ?, quantidade_minima = ?, quantidade_maxima = ?, categoria_id = ?, ativo = ? "
-                + "WHERE id = ?";
+            + "nome = ?, preco_unitario = ?, unidade = ?, quantidade = ?, quantidade_minima = ?, quantidade_maxima = ?, categoria_id = ?, ativo = true "
+            + "WHERE id = ? AND ativo = true"; 
 
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setString(1, novoProduto.getNome());
@@ -61,8 +60,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             st.setInt(5, novoProduto.getQuantidadeMinima());
             st.setInt(6, novoProduto.getQuantidadeMaxima());
             st.setInt(7, novoProduto.getCategoriaId());
-            st.setBoolean(8, novoProduto.getAtivo());
-            st.setInt(9, id);
+            st.setInt(8, id);
 
             int linhasAfetadas = st.executeUpdate();
             if (linhasAfetadas == 0) {
@@ -89,10 +87,10 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public Produto buscarPorId(Integer id) {
-        String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
-                + "FROM produto p "
-                + "JOIN categoria c ON p.categoria_id = c.id "
-                + "WHERE p.id = ?";
+          String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
+            + "FROM produto p "
+            + "JOIN categoria c ON p.categoria_id = c.id "
+            + "WHERE p.id = ? AND p.ativo = true";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -108,7 +106,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public List<Produto> resgatarTodosProdutos() {
-        String sql = "SELECT * FROM produto";
+       String sql = "SELECT * FROM produto WHERE ativo = true";
         List<Produto> lista = new ArrayList<>();
         try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -130,7 +128,6 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         p.setQuantidadeMinima(rs.getInt("quantidade_minima"));
         p.setQuantidadeMaxima(rs.getInt("quantidade_maxima"));
         p.setCategoriaId(rs.getInt("categoria_id"));
-        p.setAtivo(rs.getBoolean("ativo"));
 
         return p;
     }

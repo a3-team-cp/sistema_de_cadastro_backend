@@ -53,7 +53,8 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         categoriaExistente.setTamanho(novaCategoria.getTamanho());
         categoriaExistente.setEmbalagem(novaCategoria.getEmbalagem());
 
-        String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ?";
+        String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ? AND deleted = false";
+
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setString(1, categoriaExistente.getNome());
             st.setString(2, categoriaExistente.getTamanho().name());

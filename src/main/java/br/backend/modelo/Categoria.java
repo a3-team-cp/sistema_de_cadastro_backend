@@ -9,7 +9,6 @@ public class Categoria {
     private String nome;
     private Tamanho tamanho;
     private Embalagem embalagem;
-    private boolean deleted = false; // ✅ Campo de soft delete
 
     public Categoria() {
     }
@@ -53,17 +52,4 @@ public class Categoria {
         this.embalagem = embalagem;
     }
 
-    
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    
-    public void delete() {
-        this.deleted = true;
-    }
 }
