@@ -8,14 +8,13 @@ import br.backend.servico.ProdutoServico;
 import br.backend.util.JsonUtil;
 import br.backend.util.Util;
 
-public class DeletarProdutoEstrategia implements AcaoEstrategia{
-    
-      private final ProdutoServico produtoServico;
+public class DeletarProdutoEstrategia implements AcaoEstrategia {
+
+    private final ProdutoServico produtoServico;
 
     public DeletarProdutoEstrategia(ProdutoServico ProdutoServico) {
         this.produtoServico = ProdutoServico;
     }
-
 
     @Override
     public String executar(Requisicao<?> requisicao) {
@@ -25,9 +24,9 @@ public class DeletarProdutoEstrategia implements AcaoEstrategia{
         boolean excluido = produtoServico.deletarProduto(id);
 
         if (excluido) {
-            return JsonUtil.toJson(new Resposta<>("sucesso", "Categoria deletada", null));
+            return JsonUtil.toJson(new Resposta<>("sucesso", "Produto deletado", null));
         } else {
-            return JsonUtil.toJson(new Resposta<>("erro", "Categoria não encontrada", null));
+            return JsonUtil.toJson(new Resposta<>("erro", "Produto não encontrado", null));
         }
     }
 }

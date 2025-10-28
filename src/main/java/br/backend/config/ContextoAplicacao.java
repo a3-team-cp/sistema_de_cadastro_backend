@@ -2,7 +2,6 @@ package br.backend.config;
 
 import br.backend.controlador.impl.CategoriaControladorImpl;
 import br.backend.controlador.impl.ProdutoControladorImpl;
-import br.backend.dao.CategoriaDAO;
 import br.backend.dao.RegistroDAO;
 import br.backend.dao.impl.CategoriaDAOImpl;
 import br.backend.dao.impl.ProdutoDAOImpl;

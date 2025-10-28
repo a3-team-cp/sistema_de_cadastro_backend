@@ -1,11 +1,6 @@
 package br.backend;
 
 import br.backend.config.ContextoAplicacao;
-import br.backend.dao.impl.CategoriaDAOImpl;
-import br.backend.database.Database;
-import br.backend.modelo.Categoria;
-import br.backend.modelo.enums.Embalagem;
-import br.backend.modelo.enums.Tamanho;
 import br.backend.servidor.Servidor;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

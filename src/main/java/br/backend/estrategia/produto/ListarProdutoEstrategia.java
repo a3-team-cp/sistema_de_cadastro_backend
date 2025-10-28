@@ -6,18 +6,18 @@ import br.backend.estrategia.AcaoEstrategia;
 import br.backend.servico.ProdutoServico;
 import br.backend.util.JsonUtil;
 
-public class ListarProdutoEstrategia implements AcaoEstrategia{
-    
-        private final ProdutoServico produtoServico;
+public class ListarProdutoEstrategia implements AcaoEstrategia {
+
+    private final ProdutoServico produtoServico;
 
     public ListarProdutoEstrategia(ProdutoServico produtoServico) {
         this.produtoServico = produtoServico;
     }
 
-         @Override
+    @Override
     public String executar(Requisicao<?> requisicao) {
         return JsonUtil.toJson(
-                new Resposta<>("sucesso", "Lista de categorias", produtoServico.listarProdutos())
+                new Resposta<>("sucesso", "Lista de produtos", produtoServico.listarProdutos())
         );
     }
 }

@@ -8,19 +8,18 @@ import br.backend.servico.ProdutoServico;
 import br.backend.util.JsonUtil;
 import br.backend.util.Util;
 
-public class CriarProdutoEstrategia implements AcaoEstrategia{
- 
+public class CriarProdutoEstrategia implements AcaoEstrategia {
+
     private final ProdutoServico produtoServico;
 
     public CriarProdutoEstrategia(ProdutoServico produtoServico) {
         this.produtoServico = produtoServico;
     }
 
-
     @Override
     public String executar(Requisicao<?> requisicao) {
-        Produto pro =  Util.fromObject(requisicao.getDados(), Produto.class);
+        Produto pro = Util.fromObject(requisicao.getDados(), Produto.class);
         Produto criado = produtoServico.inserirProduto(pro);
-        return JsonUtil.toJson(new Resposta<>("Sucesso", "Categoria criada", criado));
+        return JsonUtil.toJson(new Resposta<>("Sucesso", "Produto criado", criado));
     }
 }

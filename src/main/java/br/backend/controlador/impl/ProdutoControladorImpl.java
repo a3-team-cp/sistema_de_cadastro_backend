@@ -1,8 +1,6 @@
 package br.backend.controlador.impl;
 
 import br.backend.controlador.Controlador;
-import br.backend.modelo.Categoria;
-import br.backend.modelo.Produto;
 import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
 import br.backend.estrategia.AcaoEstrategia;
@@ -46,7 +44,6 @@ public class ProdutoControladorImpl implements Controlador {
                 );
             }
 
-            // Executa a estratégia correspondente
             return estrategia.executar(requisicao);
 
         } catch (Exception e) {

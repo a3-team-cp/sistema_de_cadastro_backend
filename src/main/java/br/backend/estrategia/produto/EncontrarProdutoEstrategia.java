@@ -25,9 +25,9 @@ public class EncontrarProdutoEstrategia implements AcaoEstrategia {
         Produto encontrado = produtoServico.buscarPorId(id);
 
         if (encontrado != null) {
-            return JsonUtil.toJson(new Resposta<>("sucesso", "Categoria encontrada", encontrado));
+            return JsonUtil.toJson(new Resposta<>("sucesso", "Produto encontrado", encontrado));
         } else {
-            return JsonUtil.toJson(new Resposta<>("erro", "Categoria não encontrada", null));
+            return JsonUtil.toJson(new Resposta<>("erro", "Produto não encontrado", null));
         }
     }
 }

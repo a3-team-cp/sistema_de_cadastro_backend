@@ -3,8 +3,6 @@ package br.backend.servico;
 import br.backend.dao.CategoriaDAO;
 import br.backend.dao.impl.CategoriaDAOImpl;
 import br.backend.modelo.Categoria;
-import br.backend.modelo.enums.Embalagem;
-import br.backend.modelo.enums.Tamanho;
 
 import java.util.List;
 

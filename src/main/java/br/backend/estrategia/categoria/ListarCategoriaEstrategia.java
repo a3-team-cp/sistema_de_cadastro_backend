@@ -7,6 +7,7 @@ import br.backend.servico.CategoriaServico;
 import br.backend.util.JsonUtil;
 
 public class ListarCategoriaEstrategia implements AcaoEstrategia {
+
     private final CategoriaServico categoriaServico;
 
     public ListarCategoriaEstrategia(CategoriaServico categoriaServico) {
