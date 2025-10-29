@@ -2,7 +2,6 @@ package br.backend.servico;
 
 import br.backend.dao.ProdutoDAO;
 import br.backend.dao.RegistroDAO;
-import br.backend.modelo.Categoria;
 import br.backend.modelo.Produto;
 import br.backend.modelo.Registro;
 import br.backend.modelo.enums.Movimentacao;
@@ -14,11 +13,11 @@ import java.util.List;
 public class ProdutoServico {
 
     private final ProdutoDAO produtoDAO;
-    private final RegistroService registroService;
+    private final RegistroServico registroService;
 
     public ProdutoServico(ProdutoDAO produtoDAO, RegistroDAO registroDAO) {
         this.produtoDAO = produtoDAO;
-        this.registroService = new RegistroService(registroDAO);
+        this.registroService = new RegistroServico(registroDAO);
     }
 
     public Produto inserirProduto(Produto produto) {
@@ -28,7 +27,7 @@ public class ProdutoServico {
         // Cria o registro de movimentação
         Registro r = new Registro();
         r.setData(new Date());
-        r.setTipoDoProduto(produto);
+        r.setProdutoId(produto.getId());
         r.setMovimentacao(Movimentacao.ENTRADA);
         r.setQuantidade(produto.getQuantidade());
         r.setStatus(Status.ADICIONADO);
@@ -38,8 +37,7 @@ public class ProdutoServico {
         return produto;
     }
 
-
-    public Produto atualizarProduto(Integer id, Produto novoProduto) {
+   public Produto atualizarProduto(Integer id, Produto novoProduto) {
         // Atualiza o produto no banco
         produtoDAO.atualizarProduto(id, novoProduto);
 
@@ -49,7 +47,7 @@ public class ProdutoServico {
         // Cria um novo registro de movimentação
         Registro r = new Registro();
         r.setData(new Date());
-        r.setTipoDoProduto(produtoAtualizado);
+        r.setProdutoId(id);
         r.setMovimentacao(Movimentacao.NENHUM); // se o enum Movimentacao tiver ALTERACAO, senão use NENHUM
         r.setQuantidade(produtoAtualizado.getQuantidade());
         r.setStatus(Status.NOMEALTERADO); // agora usamos um valor existente no enum
@@ -59,6 +57,7 @@ public class ProdutoServico {
 
         return produtoAtualizado;
     }
+
 
     public List<Produto> listarProdutos() {
         return produtoDAO.resgatarTodosProdutos();
@@ -72,11 +71,10 @@ public class ProdutoServico {
 
         produtoDAO.deletarPorId(id);
 
-        // Cria um registro da deleção
         Registro r = new Registro();
         r.setData(new Date());
-        r.setTipoDoProduto(existente);
-        r.setMovimentacao(Movimentacao.SAIDA); // ou "EXCLUSAO" se existir no enum
+        r.setProdutoId(existente.getId());
+        r.setMovimentacao(Movimentacao.SAIDA);
         r.setQuantidade(existente.getQuantidade());
         r.setStatus(Status.DELETADO);
 
@@ -88,5 +86,4 @@ public class ProdutoServico {
     public Produto buscarPorId(Integer id) {
         return produtoDAO.buscarPorId(id);
     }
-
 }

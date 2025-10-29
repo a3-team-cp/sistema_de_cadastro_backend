@@ -1,8 +1,8 @@
 package br.backend.servidor;
 
-
 import br.backend.controlador.impl.CategoriaControladorImpl;
 import br.backend.controlador.impl.ProdutoControladorImpl;
+import br.backend.controlador.impl.RegistroControladorImpl;
 import br.backend.database.Database;
 import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class Servidor {
 
     private final int porta;
@@ -21,13 +20,17 @@ public class Servidor {
     private Database database;
 
     private CategoriaControladorImpl categoriaControlador;
+    
     private ProdutoControladorImpl produtoControlador;
+    
+    private RegistroControladorImpl registroControlador;
 
-    public Servidor(int porta, CategoriaControladorImpl categoriaControlador, ProdutoControladorImpl produtoControlador) {
+    public Servidor(int porta, CategoriaControladorImpl categoriaControlador, ProdutoControladorImpl produtoControlador, RegistroControladorImpl registroControlador) {
         this.porta = porta;
 
         this.categoriaControlador = categoriaControlador;
         this.produtoControlador = produtoControlador;
+        this.registroControlador = registroControlador;
     }
 
     public void iniciar() {
@@ -45,10 +48,8 @@ public class Servidor {
         }
     }
 
-
     private void processarCliente(Socket cliente) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-             PrintWriter out = new PrintWriter(cliente.getOutputStream(), true)) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream())); PrintWriter out = new PrintWriter(cliente.getOutputStream(), true)) {
 
             String jsonRequisicao;
             while ((jsonRequisicao = in.readLine()) != null) {
@@ -77,6 +78,7 @@ public class Servidor {
             return switch (entidade) {
                 case "categoria" -> categoriaControlador.processarRequisicao(req);
                 case "produto" -> produtoControlador.processarRequisicao(req);
+                case "registro" -> registroControlador.processarRequisicao(req);
                 default -> JsonUtil.toJson(new Resposta("erro", "Entidade '" + entidade + "' não reconhecida", null));
             };
 
@@ -86,7 +88,4 @@ public class Servidor {
         }
     }
 
-    private void processarClientes(Socket client){
-
-    }
 }

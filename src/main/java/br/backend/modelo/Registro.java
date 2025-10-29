@@ -8,7 +8,7 @@ public class Registro {
 
     private Integer id;
     private Date data;
-    private Produto tipoDoProduto;
+    private Integer produtoId;
     private Integer quantidade;
     private Movimentacao movimentacao;
     private Status status;
@@ -16,10 +16,10 @@ public class Registro {
     public Registro() {
     }
 
-    public Registro(Integer id, Date data, Produto tipoDoProduto, Integer quantidade, Movimentacao movimentacao, Status status) {
+    public Registro(Integer id, Date data, Integer produtoId, Integer quantidade, Movimentacao movimentacao, Status status) {
         this.id = id;
         this.data = data;
-        this.tipoDoProduto = tipoDoProduto;
+        this.produtoId = produtoId;
         this.quantidade = quantidade;
         this.movimentacao = movimentacao;
         this.status = status;
@@ -41,12 +41,12 @@ public class Registro {
         this.data = data;
     }
 
-    public Produto getTipoDoProduto() {
-        return tipoDoProduto;
+    public Integer getProdutoId() {
+        return produtoId;
     }
 
-    public void setTipoDoProduto(Produto tipoDoProduto) {
-        this.tipoDoProduto = tipoDoProduto;
+    public void setProdutoId(Integer produtoId) {
+        this.produtoId = produtoId;
     }
 
     public Integer getQuantidade() {
@@ -72,4 +72,5 @@ public class Registro {
     public void setStatus(Status status) {
         this.status = status;
     }
+
 }
