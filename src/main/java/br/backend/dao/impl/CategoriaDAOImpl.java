@@ -68,12 +68,17 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
     @Override
     public void deletarPorId(Integer id) {
-        String sql = "UPDATE categoria SET ativo = false WHERE id = ?";
+        String sql = "UPDATE categoria c, produto p "
+                + "SET c.ativo = false, p.ativo = false "
+                + "WHERE c.id = ? AND p.categoria_id = c.id "
+                + "AND c.ativo = true AND p.ativo = true";
+
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
-            st.executeUpdate();
+            int linhasAfetadas = st.executeUpdate();
+            System.out.println("Linhas afetadas: " + linhasAfetadas);
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao marcar categoria como deletada: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao deletar categoria e produtos: " + e.getMessage(), e);
         }
     }
 
