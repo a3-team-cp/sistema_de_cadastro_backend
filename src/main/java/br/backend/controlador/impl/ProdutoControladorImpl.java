@@ -5,8 +5,10 @@ import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
 import br.backend.estrategia.AcaoEstrategia;
 import br.backend.estrategia.produto.AtualizarProdutoEstrategia;
+import br.backend.estrategia.produto.AumentarPrecoProdutoEstrategia;
 import br.backend.estrategia.produto.CriarProdutoEstrategia;
 import br.backend.estrategia.produto.DeletarProdutoEstrategia;
+import br.backend.estrategia.produto.DiminuirPrecoProdutoEstrategia;
 import br.backend.estrategia.produto.EncontrarProdutoEstrategia;
 import br.backend.estrategia.produto.ListarProdutoEstrategia;
 import br.backend.servico.ProdutoServico;
@@ -34,7 +36,9 @@ public class ProdutoControladorImpl implements Controlador {
                     "encontrar", new EncontrarProdutoEstrategia(produtoServico),
                     "atualizar", new AtualizarProdutoEstrategia(produtoServico),
                     "deletar", new DeletarProdutoEstrategia(produtoServico),
-                    "listar", new ListarProdutoEstrategia(produtoServico)
+                    "listar", new ListarProdutoEstrategia(produtoServico),
+                    "aumentar", new AumentarPrecoProdutoEstrategia(produtoServico),
+                    "diminuir", new DiminuirPrecoProdutoEstrategia(produtoServico)
             );
             AcaoEstrategia estrategia = estrategias.get(acao);
 

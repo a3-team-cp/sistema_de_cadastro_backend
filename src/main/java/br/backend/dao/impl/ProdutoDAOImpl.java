@@ -49,8 +49,8 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     @Override
     public Produto atualizarProduto(Integer id, Produto novoProduto) {
         String sql = "UPDATE produto SET "
-            + "nome = ?, preco_unitario = ?, unidade = ?, quantidade = ?, quantidade_minima = ?, quantidade_maxima = ?, categoria_id = ?, ativo = true "
-            + "WHERE id = ? AND ativo = true"; 
+                + "nome = ?, preco_unitario = ?, unidade = ?, quantidade = ?, quantidade_minima = ?, quantidade_maxima = ?, categoria_id = ?, ativo = true "
+                + "WHERE id = ? AND ativo = true";
 
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setString(1, novoProduto.getNome());
@@ -87,10 +87,10 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public Produto buscarPorId(Integer id) {
-          String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
-            + "FROM produto p "
-            + "JOIN categoria c ON p.categoria_id = c.id "
-            + "WHERE p.id = ? AND p.ativo = true";
+        String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
+                + "FROM produto p "
+                + "JOIN categoria c ON p.categoria_id = c.id "
+                + "WHERE p.id = ? AND p.ativo = true";
         try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -106,7 +106,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public List<Produto> resgatarTodosProdutos() {
-       String sql = "SELECT * FROM produto WHERE ativo = true";
+        String sql = "SELECT * FROM produto WHERE ativo = true";
         List<Produto> lista = new ArrayList<>();
         try (PreparedStatement st = database.getConnection().prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -116,6 +116,29 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             throw new RuntimeException("Erro ao buscar todos os Produtos: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    @Override
+    public void aumentarValorProduto(Double percentual) {
+        String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ?/100) WHERE ativo = true";
+        try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
+            st.setDouble(1, percentual);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao aumentar valor dos produtos: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void diminuirValorProduto(Double percentual) {
+        String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 - ?/100) WHERE ativo = true";
+        try (PreparedStatement st = database.getConnection().prepareStatement(sql)) {
+            st.setDouble(1, percentual);
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao diminuir valor dos produtos: " + e.getMessage(), e);
+        }
     }
 
     private Produto mapProduto(ResultSet rs) throws SQLException {
@@ -131,5 +154,4 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
         return p;
     }
-
 }

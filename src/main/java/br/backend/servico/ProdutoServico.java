@@ -37,7 +37,7 @@ public class ProdutoServico {
         return produto;
     }
 
-   public Produto atualizarProduto(Integer id, Produto novoProduto) {
+    public Produto atualizarProduto(Integer id, Produto novoProduto) {
         // Atualiza o produto no banco
         produtoDAO.atualizarProduto(id, novoProduto);
 
@@ -57,7 +57,6 @@ public class ProdutoServico {
 
         return produtoAtualizado;
     }
-
 
     public List<Produto> listarProdutos() {
         return produtoDAO.resgatarTodosProdutos();
@@ -86,4 +85,13 @@ public class ProdutoServico {
     public Produto buscarPorId(Integer id) {
         return produtoDAO.buscarPorId(id);
     }
+
+     public void aumentarValorProduto(Double percentual) {
+        produtoDAO.aumentarValorProduto(percentual);
+    }
+
+    public void diminuirValorProduto(Double percentual) {
+        produtoDAO.diminuirValorProduto(percentual);
+    }
 }
+    
