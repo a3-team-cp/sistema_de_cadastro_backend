@@ -3,6 +3,7 @@ package br.backend.servidor;
 import br.backend.controlador.impl.CategoriaControladorImpl;
 import br.backend.controlador.impl.ProdutoControladorImpl;
 import br.backend.controlador.impl.RegistroControladorImpl;
+import br.backend.controlador.impl.RelatorioControladorImpl;
 import br.backend.database.Database;
 import br.backend.dto.Requisicao;
 import br.backend.dto.Resposta;
@@ -24,13 +25,16 @@ public class Servidor {
     private ProdutoControladorImpl produtoControlador;
     
     private RegistroControladorImpl registroControlador;
+    
+    private RelatorioControladorImpl relatorioControlador;
 
-    public Servidor(int porta, CategoriaControladorImpl categoriaControlador, ProdutoControladorImpl produtoControlador, RegistroControladorImpl registroControlador) {
+    public Servidor(int porta, CategoriaControladorImpl categoriaControlador, ProdutoControladorImpl produtoControlador, RegistroControladorImpl registroControlador, RelatorioControladorImpl relatorioControlador) {
         this.porta = porta;
 
         this.categoriaControlador = categoriaControlador;
         this.produtoControlador = produtoControlador;
         this.registroControlador = registroControlador;
+        this.relatorioControlador = relatorioControlador;
     }
 
     public void iniciar() {
@@ -79,6 +83,7 @@ public class Servidor {
                 case "categoria" -> categoriaControlador.processarRequisicao(req);
                 case "produto" -> produtoControlador.processarRequisicao(req);
                 case "registro" -> registroControlador.processarRequisicao(req);
+                case "relatorio" -> relatorioControlador.processarRequisicao(req);
                 default -> JsonUtil.toJson(new Resposta("erro", "Entidade '" + entidade + "' não reconhecida", null));
             };
 

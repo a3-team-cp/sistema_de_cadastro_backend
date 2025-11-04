@@ -16,7 +16,8 @@ public class Main {
                 3001,
                 contexto.getCategoriaControlador(),
                 contexto.getProdutoControlador(),
-                contexto.getRegistroControlador());
+                contexto.getRegistroControlador(),
+                contexto.getRelatorioControlador());
         servidor.iniciar();
     }
 }
