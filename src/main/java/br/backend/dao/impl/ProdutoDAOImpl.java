@@ -11,14 +11,41 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Implementação de {@link ProdutoDAO} utilizando JDBC puro.
+ *
+ * <p>Responsável por executar operações de persistência relacionadas à entidade
+ * {@link Produto}, incluindo inserção, atualização, busca, exclusão lógica
+ * (soft delete) e ajustes de preço.</p>
+ *
+ * <p>Esta classe acessa o banco de dados utilizando a conexão fornecida por
+ * {@link Database}. Todas as consultas tratam o campo <code>ativo</code>, evitando
+ * o retorno de produtos marcados como inativos.</p>
+ */
 public class ProdutoDAOImpl implements ProdutoDAO {
 
     private final Database database;
 
+    /**
+     * Construtor padrão.
+     *
+     * @param database fonte de conexões JDBC
+     */
     public ProdutoDAOImpl(Database database) {
         this.database = database;
     }
 
+
+    /**
+     * Insere um novo produto no banco de dados.
+     *
+     * <p>Após a execução do comando SQL, o ID gerado automaticamente é atribuído
+     * ao objeto fornecido.</p>
+     *
+     * @param obj produto a ser inserido
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public void inserirProduto(Produto obj) {
         String sql = "INSERT INTO produto (nome, preco_unitario, unidade, quantidade, quantidade_minima, quantidade_maxima, categoria_id) "
@@ -46,6 +73,17 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de um produto existente, mantendo seu status como ativo.
+     *
+     * <p>Se nenhum produto ativo for encontrado com o ID fornecido, uma exceção
+     * é lançada.</p>
+     *
+     * @param id          ID do produto a ser atualizado
+     * @param novoProduto objeto contendo os novos dados
+     * @return o produto atualizado, já recuperado do banco
+     * @throws RuntimeException caso o produto não exista ou ocorra erro SQL
+     */
     @Override
     public Produto atualizarProduto(Integer id, Produto novoProduto) {
         String sql = "UPDATE produto SET "
@@ -74,6 +112,12 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+    /**
+     * Realiza o soft delete de um produto, marcando-o como inativo.
+     *
+     * @param id ID do produto a ser desativado
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public void deletarPorId(Integer id) {
         String sql = "UPDATE produto SET ativo = false WHERE id = ?";
@@ -85,6 +129,16 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+
+    /**
+     * Busca um produto pelo seu ID, incluindo informações da categoria associada.
+     *
+     * <p>Retorna apenas produtos marcados como ativos.</p>
+     *
+     * @param id ID do produto buscado
+     * @return o produto encontrado ou {@code null} caso não exista
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public Produto buscarPorId(Integer id) {
         String sql = "SELECT p.*, c.nome AS c_nome, c.tamanho AS c_tamanho, c.embalagem AS c_embalagem "
@@ -104,6 +158,12 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+    /**
+     * Recupera todos os produtos ativos cadastrados.
+     *
+     * @return lista contendo todos os produtos ativos
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public List<Produto> resgatarTodosProdutos() {
         String sql = "SELECT * FROM produto WHERE ativo = true";
@@ -118,6 +178,12 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         return lista;
     }
 
+    /**
+     * Aumenta o valor unitário de todos os produtos ativos.
+     *
+     * @param percentual percentual de aumento (ex.: 10.0 = 10%)
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public void aumentarValorProduto(Double percentual) {
         String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ?/100) WHERE ativo = true";
@@ -129,6 +195,12 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+    /**
+     * Reduz o valor unitário de todos os produtos ativos.
+     *
+     * @param percentual percentual de redução (ex.: 5.0 = 5%)
+     * @throws RuntimeException caso ocorra erro SQL
+     */
     @Override
     public void diminuirValorProduto(Double percentual) {
         String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 - ?/100) WHERE ativo = true";
@@ -141,6 +213,15 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
+    /**
+     * Converte uma linha do {@link ResultSet} em um objeto {@link Produto}.
+     *
+     * <p>Mapeia todos os campos básicos da entidade.</p>
+     *
+     * @param rs resultado da consulta SQL
+     * @return objeto {@link Produto} preenchido com os dados do banco
+     * @throws SQLException caso ocorra erro ao ler o ResultSet
+     */
     private Produto mapProduto(ResultSet rs) throws SQLException {
         Produto p = new Produto();
         p.setId(rs.getInt("id"));

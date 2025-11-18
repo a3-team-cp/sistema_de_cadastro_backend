@@ -10,14 +10,40 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação de {@link RelatorioDAO} utilizando JDBC puro.
+ *
+ * <p>Esta classe recupera dados de movimentações combinadas com informações de produtos
+ * para formar objetos {@link Relatorio}. Trata-se de uma consulta de agregação
+ * entre as tabelas <code>registro</code> e <code>produto</code>, retornando
+ * informações completas para exibição no relatório.</p>
+ *
+ * <p>A ordenação é feita pela data da movimentação, do registro mais recente para o mais antigo.</p>
+ */
 public class RelatorioDAOImpl implements RelatorioDAO {
 
     private final Database database;
 
+    /**
+     * Construtor padrão.
+     *
+     * @param database provedor de conexões para acesso ao banco de dados
+     */
     public RelatorioDAOImpl(Database database) {
         this.database = database;
     }
 
+
+    /**
+     * Retorna uma lista de objetos {@link Relatorio} contendo informações de
+     * movimentação (entrada/saída), status e dados básicos do produto.
+     *
+     * <p>Realiza um INNER JOIN entre as tabelas <code>registro</code> e
+     * <code>produto</code> para composição dos dados.</p>
+     *
+     * @return lista de relatórios ordenada por data (descendente)
+     * @throws RuntimeException caso algum erro SQL ocorra
+     */
     @Override
     public List<Relatorio> listarRelatorio() {
         String sql = """
@@ -47,6 +73,7 @@ public class RelatorioDAOImpl implements RelatorioDAO {
 
         return relatorios;
     }
+
 
     private Relatorio mapRelatorio(ResultSet rs) throws SQLException {
         Relatorio relatorio = new Relatorio();

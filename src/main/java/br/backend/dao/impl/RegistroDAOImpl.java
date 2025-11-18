@@ -14,14 +14,38 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação de {@link RegistroDAO} utilizando JDBC puro.
+ *
+ * <p>Responsável por persistir e recuperar registros de movimentação de produtos,
+ * incluindo entradas e saídas, juntamente com o status de cada operação.</p>
+ *
+ * <p>As operações desta classe utilizam a conexão fornecida por {@link Database}
+ * e mapeiam diretamente os dados da tabela <code>registro</code>.</p>
+ */
 public class RegistroDAOImpl implements RegistroDAO {
 
     private final Database database;
 
+    /**
+     * Construtor padrão.
+     *
+     * @param database provedor de conexões para acesso ao banco de dados
+     */
     public RegistroDAOImpl(Database database) {
         this.database = database;
     }
 
+    /**
+     * Insere um novo registro no banco de dados.
+     *
+     * <p>Converte o objeto {@link Registro} para os tipos aceitos pelo JDBC,
+     * incluindo conversão de data para {@link Timestamp} e conversão dos enums
+     * {@link Movimentacao} e {@link Status} para suas representações textuais.</p>
+     *
+     * @param registro objeto contendo os dados da movimentação
+     * @throws RuntimeException caso ocorra erro SQL ou nenhuma linha seja afetada
+     */
     @Override
     public void inserirRegistro(Registro registro) {
         String sql = "INSERT INTO registro (data, produto_id, quantidade, movimentacao, status) VALUES (?, ?, ?, ?, ?)";
@@ -44,6 +68,12 @@ public class RegistroDAOImpl implements RegistroDAO {
         }
     }
 
+    /**
+     * Retorna todos os registros de movimentações, ordenados do mais recente para o mais antigo.
+     *
+     * @return lista de registros ordenados por data descendente
+     * @throws RuntimeException caso ocorra erro ao executar a consulta
+     */
     @Override
     public List<Registro> listarRegistros() {
         String sql = "SELECT * FROM registro ORDER BY data DESC";
@@ -63,6 +93,16 @@ public class RegistroDAOImpl implements RegistroDAO {
         return registros;
     }
 
+    /**
+     * Converte uma linha do {@link ResultSet} em um objeto {@link Registro}.
+     *
+     * <p>Realiza mapeamento completo, incluindo conversão para enums
+     * {@link Movimentacao} e {@link Status}, além de reconstrução da data.</p>
+     *
+     * @param rs resultado da consulta SQL
+     * @return objeto {@link Registro} mapeado
+     * @throws SQLException caso ocorra erro ao ler os dados
+     */
     private Registro mapRegistro(ResultSet rs) throws SQLException {
         Registro registro = new Registro();
         

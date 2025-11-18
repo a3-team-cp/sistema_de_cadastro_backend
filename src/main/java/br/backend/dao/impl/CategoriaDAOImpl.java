@@ -13,14 +13,39 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação de {@link CategoriaDAO} utilizando JDBC puro.
+ *
+ * <p>Responsável por realizar operações CRUD no banco de dados para a entidade
+ * {@link Categoria}. Todas as operações consideram o campo <code>ativo</code>
+ * para aplicar a regra de <b>soft delete</b>, garantindo que categorias excluídas
+ * não sejam retornadas nas consultas.</p>
+ *
+ * <p>Esta classe utiliza uma instância de {@link Database} para obter conexões
+ * e executar comandos SQL diretamente.</p>
+ */
 public class CategoriaDAOImpl implements CategoriaDAO {
 
     Database database;
 
+    /**
+     * Construtor padrão.
+     *
+     * @param database objeto de acesso à conexão com o banco de dados
+     */
     public CategoriaDAOImpl(Database database) {
         this.database = database;
     }
 
+    /**
+     * Insere uma nova categoria no banco de dados.
+     *
+     * <p>Após a inserção, o ID gerado automaticamente é atribuído ao objeto
+     * {@link Categoria} recebido como parâmetro.</p>
+     *
+     * @param cat categoria a ser inserida
+     * @throws RuntimeException em caso de erro SQL
+     */
     @Override
     public void inserirCategoria(Categoria cat) {
         String sql = "INSERT INTO categoria (nome, tamanho, embalagem) VALUES (?, ?, ?)";
@@ -41,6 +66,16 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de uma categoria existente.
+     *
+     * <p>O método garante que a categoria existe antes de atualizar. Caso não seja
+     * encontrada, lança uma exceção informativa.</p>
+     *
+     * @param id            identificador da categoria a ser atualizada
+     * @param novaCategoria dados atualizados da categoria
+     * @throws RuntimeException se a categoria não existir ou ocorrer erro SQL
+     */
     @Override
     public void atualizarCategoria(Integer id, Categoria novaCategoria) {
 
@@ -66,6 +101,16 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         }
     }
 
+    /**
+     * Realiza o soft delete da categoria e dos produtos associados.
+     *
+     * <p>Em vez de remover fisicamente os registros, o método define o campo
+     * <code>ativo = false</code> tanto na categoria quanto nos produtos que
+     * pertencem a ela.</p>
+     *
+     * @param id ID da categoria a ser desativada
+     * @throws RuntimeException em caso de erro SQL
+     */
     @Override
     public void deletarPorId(Integer id) {
        String sql = "UPDATE categoria c " +
@@ -82,6 +127,15 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         }
     }
 
+    /**
+     * Busca uma categoria pelo seu ID.
+     *
+     * <p>Retorna apenas categorias ativas (soft delete ativo).</p>
+     *
+     * @param id identificador da categoria a ser buscada
+     * @return a categoria encontrada ou {@code null} caso não exista
+     * @throws RuntimeException em caso de erro SQL
+     */
     @Override
     public Categoria buscarPorId(Integer id) {
         String sql = "SELECT * FROM categoria WHERE id = ? AND ativo = true";
@@ -98,6 +152,12 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         }
     }
 
+    /**
+     * Busca todas as categorias ativas no sistema.
+     *
+     * @return lista de categorias
+     * @throws RuntimeException em caso de erro SQL
+     */
     @Override
     public List<Categoria> buscarTodasCategorias() {
         String sql = "SELECT * FROM categoria WHERE ativo = true";
@@ -112,6 +172,16 @@ public class CategoriaDAOImpl implements CategoriaDAO {
         return lista;
     }
 
+    /**
+     * Converte um {@link ResultSet} em um objeto {@link Categoria}.
+     *
+     * <p>Mapeia todos os campos relevantes, incluindo os enums
+     * {@link Tamanho} e {@link Embalagem}.</p>
+     *
+     * @param rs resultado da consulta SQL
+     * @return objeto {@link Categoria} preenchido com os dados do banco
+     * @throws SQLException caso ocorra erro ao ler o ResultSet
+     */
     private Categoria mapCategoria(ResultSet rs) throws SQLException {
         Categoria cat = new Categoria();
         cat.setId(rs.getInt("id"));
