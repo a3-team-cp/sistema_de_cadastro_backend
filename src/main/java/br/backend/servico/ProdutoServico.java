@@ -18,13 +18,14 @@ import java.util.List;
  * movimentações no estoque utilizando {@link RegistroServico}, garantindo histórico
  * completo das ações realizadas.</p>
  *
- * <p>As movimentações registradas incluem:
+ * <p>As movimentações registradas incluem:</p>
  * <ul>
  *   <li><b>ENTRADA</b> — quando um produto é criado;</li>
  *   <li><b>NENHUM</b> — quando o produto é apenas atualizado (ex.: nome ou quantidade);</li>
  *   <li><b>SAIDA</b> — quando um produto é deletado (soft delete);</li>
  * </ul>
- * Em conjunto, o {@link Status} é usado para caracterizar o tipo de alteração.</p>
+ *
+ * <p>Em conjunto, o {@link Status} é usado para caracterizar o tipo de alteração.</p>
  */
 public class ProdutoServico {
 

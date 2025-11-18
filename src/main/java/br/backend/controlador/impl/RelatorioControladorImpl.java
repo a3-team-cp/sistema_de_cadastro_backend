@@ -38,11 +38,10 @@ public class RelatorioControladorImpl implements Controlador {
     /**
      * Processa uma requisição referente a relatórios.
      *
-     * <p>Atualmente suporta apenas a ação:
+     * <p>Atualmente suporta apenas a ação:</p>
      * <ul>
      *     <li><b>listar</b>: retorna os relatórios gerados.</li>
      * </ul>
-     * </p>
      *
      * <p>Caso a ação recebida não corresponda a nenhuma estratégia conhecida,
      * uma resposta padronizada de erro é retornada. Qualquer exceção inesperada

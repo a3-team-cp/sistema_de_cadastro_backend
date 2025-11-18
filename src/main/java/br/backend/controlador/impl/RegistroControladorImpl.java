@@ -41,12 +41,11 @@ public class RegistroControladorImpl implements Controlador {
     /**
      * Processa uma requisição de registro com base na ação informada.
      *
-     * <p>As ações suportadas são:
+     * <p>As ações suportadas são:</p>
      * <ul>
      *     <li><b>criar</b>: cria um novo registro;</li>
      *     <li><b>listar</b>: retorna todos os registros existentes.</li>
      * </ul>
-     * </p>
      *
      * <p>Se a ação fornecida não corresponder a nenhuma estratégia conhecida,
      * é retornada uma resposta padronizada de erro. Qualquer exceção durante

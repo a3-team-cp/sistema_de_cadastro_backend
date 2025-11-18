@@ -1,11 +1,11 @@
-package br.backend;
+package br.backend.principal;
 
 import br.backend.config.ContextoAplicacao;
 import br.backend.servidor.Servidor;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Principal {
 
     public static void main(String[] args) {
 
